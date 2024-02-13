@@ -7,8 +7,8 @@ import jwt from "jsonwebtoken";
 // name, email, password, gender
 export const register = async (req: express.Request, res: express.Response) => {
     try {
-        const { name, email, password, gender } = req.body;
-        if (!name || !email || !password || !gender) {
+        const { Name, email, password, gender } = req.body;
+        if (!Name || !email || !password || !gender) {
             res.status(400).json({
                 message: "Please provide all necessary credentials..."
             })
@@ -34,13 +34,14 @@ export const register = async (req: express.Request, res: express.Response) => {
      
         const hashedPassword = bcryptjs.hashSync(password, 10);
         const user = new User({
-            name, email, password: hashedPassword, gender
+            Name, email, password: hashedPassword, gender
         });
         await user.save();
         return res.status(200).json({
-            message: "User registered successfully..."
+            message: "User registered successfully...",  user
         });
     } catch (err) {
+        console.log(err)
         res.status(500).json({
             message: "Error while registering customer..."
         })
@@ -81,7 +82,7 @@ export const login = async (req: express.Request, res: express.Response) => {
         );
         res.cookie("userAuthToken", userAuthToken, { httpOnly: true });
         res.cookie("userRefreshToken", userRefreshToken, { httpOnly: true });
-        res.status(200).json({ message: "Login Successfull...", user, userAuthToken, userRefreshToken });
+        res.status(200).json({ message: "Login Successfull...", user , userAuthToken, userRefreshToken });
     } catch (err) {
         res.status(500).json({
             message: "Unable to login..."
