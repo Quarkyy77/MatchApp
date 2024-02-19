@@ -1,0 +1,2 @@
+move env to outer backend
+then remove filename from package.json
